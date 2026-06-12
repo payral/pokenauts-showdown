@@ -1,0 +1,54 @@
+# Nested repo backups from the monorepo conversion
+.repo-git-backups/
+
+# Dependencies
+**/node_modules/
+
+# Build output
+**/dist/
+**/.tsbuildinfo
+**/coverage/
+
+# Local env/secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local bot/runtime data
+ashketchup/data/
+ashketchup/logs/
+
+# Pokemon Showdown runtime/generated files
+showdown/config/*
+!showdown/config/formats.ts
+!showdown/config/config-example.js
+showdown/logs/
+showdown/databases/*.db*
+showdown/test/modlogs/
+showdown/test/replays/*.html
+showdown/server/chat-plugins/private/
+showdown/server/chat-plugins/private.js
+showdown/server/chat-plugins/*-private.js
+showdown/tools/set-import/sets/
+showdown/tools/set-import/importer.js
+showdown/tools/modlog/converter.js
+showdown/**/sourceMaps/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# Temp
+tmp/
+temp/
