@@ -11,7 +11,7 @@ import * as crypto from 'crypto';
 import type { RoomBattle } from './room-battle';
 
 const TOKEN_BYTES = 18;
-const NAME_SUFFIX_LENGTH = 8;
+const NAME_SUFFIX_LENGTH = 5;
 const DEFAULT_TOKEN_TTL = 30 * 60 * 1000;
 const DEFAULT_AUTO_CLAIM_TTL = 2 * 60 * 1000;
 
