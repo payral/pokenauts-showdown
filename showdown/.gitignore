@@ -2,6 +2,9 @@
 !/config/formats.ts
 !/config/config-example.js
 /logs/**/*
+!/logs/
+!/logs/**/
+!/logs/**/.gitkeep
 /test/modlogs
 /test/replays/*.html
 /node_modules
