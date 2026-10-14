@@ -158,7 +158,6 @@ async function handleHelpCommand(
       'AshKetchup commands:',
       '`/ashketchup challenge opponent:@user wager:50` - start a 3v3 match card.',
       '`/ashketchup test wager:1` - test the private-link battle flow by yourself.',
-      '`/ashketchup room match_id:<id> room_id:battle-gen9customgame-123` - tell AshKetchup where to watch.',
       '',
       'Links:',
       'Source code: <https://github.com/payral/pokenauts-showdown>',
