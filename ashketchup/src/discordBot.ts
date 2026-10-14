@@ -84,7 +84,6 @@ export async function startDiscordBot(
           await handlePokenautsMatchButton(
             interaction,
             config,
-            inventoryTracker,
             pokenautsMatches
           );
         } else {
@@ -351,7 +350,7 @@ async function handlePokenautsTeamModal(
   if (missingSlots.length > 0) {
     const content = inventorySnapshot.entries.length === 0
       ? "You haven't shown AshKetchup what Pokemon you have yet. Run `@Pokenauts pokemon` in the match channel first, then click Submit Team again."
-      : `I have not seen slot(s) ${missingSlots.join(', ')} in your Pokenauts inventory yet. ` +
+      : `You haven't shown AshKetchup the Pokemon in slot(s) ${missingSlots.join(', ')} yet. ` +
         'Run `@Pokenauts pokemon` in the match channel and page until those slots are visible, then submit again.';
 
     await interaction.reply({
@@ -402,7 +401,6 @@ async function handlePokenautsTeamModal(
 async function handlePokenautsMatchButton(
   interaction: ButtonInteraction,
   config: AppConfig,
-  inventoryTracker: PokenautsInventoryTracker,
   pokenautsMatches: PokenautsMatchStore
 ): Promise<void> {
   const [, action, matchId] = interaction.customId.split(':');
@@ -414,7 +412,7 @@ async function handlePokenautsMatchButton(
   }
 
   if (action === 'submit') {
-    await showTeamSubmissionModal(interaction, match, inventoryTracker);
+    await showTeamSubmissionModal(interaction, match);
     return;
   }
 
@@ -451,23 +449,12 @@ async function handlePokenautsMatchButton(
 
 async function showTeamSubmissionModal(
   interaction: ButtonInteraction,
-  match: PokenautsMatch,
-  inventoryTracker: PokenautsInventoryTracker
+  match: PokenautsMatch
 ): Promise<void> {
   const playerKey = getParticipantKey(match, interaction.user.id);
   if (!playerKey) {
     await interaction.reply({
       content: 'Only match participants can submit a team.',
-      ephemeral: true,
-    });
-    return;
-  }
-
-  const inventorySnapshot = inventoryTracker.getSnapshot(interaction.user.id);
-  if (inventorySnapshot.entries.length === 0) {
-    await interaction.reply({
-      content:
-        "You haven't shown AshKetchup what Pokemon you have yet. Run `@Pokenauts pokemon` in the match channel first, then click Submit Team again.",
       ephemeral: true,
     });
     return;
