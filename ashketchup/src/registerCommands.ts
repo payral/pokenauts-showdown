@@ -32,23 +32,6 @@ const commands = [
             .setDescription('Optional fake Pokecoin wager for payment text preview.')
             .setMinValue(0)
         )
-    )
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('room')
-        .setDescription('Tell AshKetchup which Showdown battle room to watch.')
-        .addStringOption(option =>
-          option
-            .setName('match_id')
-            .setDescription('The AshKetchup match ID.')
-            .setRequired(true)
-        )
-        .addStringOption(option =>
-          option
-            .setName('room_id')
-            .setDescription('The Showdown room ID, like battle-gen9customgame-123.')
-            .setRequired(true)
-        )
     ),
   new SlashCommandBuilder()
     .setName('help')

@@ -126,10 +126,6 @@ export async function startDiscordBot(
           return;
         }
 
-        if (subcommand === 'room') {
-          await handlePokenautsRoomCommand(interaction, config, pokenautsMatches);
-          return;
-        }
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -304,49 +300,6 @@ async function handlePokenautsTestBotCommand(
     content:
       `${pokeball(config)} Training battle queued! Created solo test match ${match.id}. Run \`@Pokenauts pokemon\`, submit your 3 slots, ` +
       `then ${config.showdownTestBotAUsername} will challenge your submitted Showdown username.`,
-    ephemeral: true,
-  });
-}
-
-async function handlePokenautsRoomCommand(
-  interaction: ChatInputCommandInteraction,
-  config: AppConfig,
-  pokenautsMatches: PokenautsMatchStore
-): Promise<void> {
-  const matchId = interaction.options.getString('match_id', true);
-  const roomId = interaction.options.getString('room_id', true).trim();
-  const match = pokenautsMatches.getMatch(matchId);
-
-  if (!match) {
-    await interaction.reply({content: 'Pokenauts match not found.', ephemeral: true});
-    return;
-  }
-
-  if (!canManagePokenautsMatch(interaction, match, config)) {
-    await interaction.reply({
-      content: 'Only a match participant, banker, or server manager can set the room.',
-      ephemeral: true,
-    });
-    return;
-  }
-
-  if (!roomId.startsWith('battle-')) {
-    await interaction.reply({
-      content: 'room_id must be a battle room id, like battle-gen9customgame-123.',
-      ephemeral: true,
-    });
-    return;
-  }
-
-  await showdownHarness.connectCoordinator();
-  showdownHarness.coordinator.joinRoom(roomId);
-  const updatedMatch = pokenautsMatches.watchRoom(match.id, roomId);
-  await updatePokenautsMatchMessage(interaction.client, config, updatedMatch);
-
-  await interaction.reply({
-    content:
-      `${pokeball(config)} AshKetchup is watching! This match is happening. Watch here: ` +
-      `${buildShowdownRoomUrl(updatedMatch)}`,
     ephemeral: true,
   });
 }
@@ -1278,8 +1231,6 @@ function buildPrivatePokenautsTeamMessage(
   const challengeCommand = `/challenge ${
     opponentTeam?.showdownUsername || '<opponent-showdown-username>'
   }, ${match.format}`;
-  const roomCommand = `/ashketchup room match_id:${match.id} room_id:<battle-room-id>`;
-
   return [
     `${pokeball()} Your Pokenauts 3v3 match: ${match.id}`,
     `Showdown link: ${match.showdownUrl}`,
@@ -1294,14 +1245,7 @@ function buildPrivatePokenautsTeamMessage(
       : ['Challenge with this command once you know their Showdown username:', '```', challengeCommand, '```'].join('\n'),
     match.testMode
       ? 'For the solo test, AshKetchup should auto-detect the battle room after you accept.'
-      : [
-          'After the battle starts, copy the battle room id from the Showdown URL.',
-          'Example: if the URL ends in `/battle-gen9customgame-123`, the room id is `battle-gen9customgame-123`.',
-          'Then run:',
-          '```',
-          roomCommand,
-          '```',
-        ].join('\n'),
+      : 'AshKetchup should auto-detect the battle room after the private-link battle starts.',
     '',
     'Selected Pokenauts Pokemon:',
     team.expectedPokemon
@@ -1444,7 +1388,6 @@ function buildPublicMatchMessage(
     `${playerA}: challenge ${match.players.b.username}.`,
     `${playerB}: accept the challenge from ${match.players.a.username}.`,
     'Each player: click your button below to see your assigned team privately.',
-    'After the battle starts, copy the battle room id from the browser URL and give it to the coordinator.',
   ].join('\n');
 }
 
