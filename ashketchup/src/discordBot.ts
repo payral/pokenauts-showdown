@@ -343,14 +343,18 @@ async function handlePokenautsTeamModal(
   }
 
   const entries = inventoryTracker.getEntries(interaction.user.id, slots);
+  const inventorySnapshot = inventoryTracker.getSnapshot(interaction.user.id);
   const foundSlots = new Set(entries.map(entry => entry.slot));
   const missingSlots = slots.filter(slot => !foundSlots.has(slot));
 
   if (missingSlots.length > 0) {
+    const content = inventorySnapshot.entries.length === 0
+      ? "You haven't shown AshKetchup what Pokemon you have yet. Run `@Pokenauts pokemon` in the match channel first, then click Submit Team again."
+      : `I have not seen slot(s) ${missingSlots.join(', ')} in your Pokenauts inventory yet. ` +
+        'Run `@Pokenauts pokemon` in the match channel and page until those slots are visible, then submit again.';
+
     await interaction.reply({
-      content:
-        `I have not seen slot(s) ${missingSlots.join(', ')} in your Pokenauts inventory yet. ` +
-        'Run `@Pokenauts pokemon` in the match channel and page until those slots are visible, then submit again.',
+      content,
       ephemeral: true,
     });
     return;
