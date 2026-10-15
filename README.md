@@ -1,5 +1,11 @@
 # Pokenauts Showdown
 
+## Demo
+
+[![Watch the Pokenauts Showdown demo](https://img.youtube.com/vi/VEGTR_RrASY/hqdefault.jpg)](https://www.youtube.com/watch?v=VEGTR_RrASY)
+
+[Watch the demo on YouTube](https://www.youtube.com/watch?v=VEGTR_RrASY).
+
 Self-hosted Pokemon Showdown battles for a Discord/Pokenauts server.
 
 This repo is a two-service monorepo:
